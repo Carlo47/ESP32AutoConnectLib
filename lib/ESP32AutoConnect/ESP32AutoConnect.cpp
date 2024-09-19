@@ -29,9 +29,6 @@
 #include "ESP32AutoConnect.h"
 #include "query.h"
 
-IPAddress apIpAddress(192, 168, 4, 1);
-IPAddress apGateway(192, 168, 4, 111);
-IPAddress apSubnetmask(255, 255, 255, 0);
 
 /**
  * Set a custom hostname, defaults to esp-websrv
@@ -108,13 +105,10 @@ void ESP32AutoConnect::requestCredentialsAndRestart()
   Preferences& pr = _prefs;
   String& hn = _hostname;
 
-  log_e("\n==> Connect your mobile to %s and \nenter your WLAN credentials on page http://%s", _apSSID.c_str(), apIpAddress.toString().c_str());
-
-  WiFi.mode(WIFI_AP);
-  WiFi.softAPConfig(apIpAddress, apGateway, apSubnetmask);
   WiFi.softAP(_apSSID.c_str(), NULL);
+  log_e("\n==> Connect your mobile to %s and \nenter your WLAN credentials on page http://%s", _apSSID.c_str(), WiFi.softAPIP().toString().c_str());
+
   String networks = composeNetworkList();
-  
   query.replace("{n}", networks); // insert available networks into query web page
 
   _server.on("/", 
