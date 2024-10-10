@@ -1,6 +1,7 @@
 /**
  * Program      ESP remote control.cpp
  * Author       2024-09-18 Charles Geiser (https://www.dodeka.ch)
+ *              2024-10-10 Update of network list added
  * 
  * Purpose      The program shows the use of my simple ESP32AutoConnect library.
  * 

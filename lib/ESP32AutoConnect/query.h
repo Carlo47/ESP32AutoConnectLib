@@ -1,4 +1,4 @@
-String query = R"rawliteral(
+String query0 = R"rawliteral(
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,6 +29,7 @@ String query = R"rawliteral(
     }
 
     #panel {
+      width: 18rem;
       justify-items: center;
       padding: 1rem 0 1rem 0;
       background-color: #29363d;
@@ -103,8 +104,5 @@ String query = R"rawliteral(
           <button type="submit">Connect</button> 
       </form>
   </div>
-  <script>
-
-  </script>
 </body>
 </html>)rawliteral";

@@ -104,16 +104,17 @@ void ESP32AutoConnect::requestCredentialsAndRestart()
 {
   Preferences& pr = _prefs;
   String& hn = _hostname;
-
+  WiFi.disconnect();
   WiFi.softAP(_apSSID.c_str(), NULL);
   log_e("\n==> Connect your mobile to %s and \nenter your WLAN credentials on page http://%s", _apSSID.c_str(), WiFi.softAPIP().toString().c_str());
 
   String networks = composeNetworkList();
+  String query = query0;
   query.replace("{n}", networks); // insert available networks into query web page
 
   _server.on("/", 
             HTTP_GET, 
-            [](AsyncWebServerRequest *request)
+            [query](AsyncWebServerRequest *request)
               {
                 request->send(200, "text/html", query.c_str());
               });
