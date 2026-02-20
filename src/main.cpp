@@ -34,11 +34,11 @@
 #include "index.h"
 
 extern void heartbeat(uint8_t pin, unsigned long nBeats, unsigned long nSecs, unsigned long dutyOrPulseWidth, bool duty=true);
+extern void initESP32AutoConnect(AsyncWebServer *webServer, Preferences &prefs, const char hostname[]);
 extern void printNearbyNetworks();
 extern void printConnectionDetails();
 
-const String  HOSTNAME = "esp-websrv";
-const String  SSID_AP  = "esp-portal";
+const char HOSTNAME[] = "esp32-device";
 
 Preferences prefs; // holds the WiFi credentials
 AsyncWebServer server(80);
@@ -49,13 +49,13 @@ AsyncWebServer server(80);
  */
 void handleWebUi()
 {
-    server.on("/", 
-              HTTP_GET, 
-              [](AsyncWebServerRequest *request) 
-                {
-                  request->send_P(200, "text/html", index_html);
-                }
-             );
+  server.on("/", 
+            HTTP_GET, 
+            [](AsyncWebServerRequest *request) 
+              {
+                request->send(200, "text/html", index_html);
+              }
+            );
 }
 
 
@@ -70,18 +70,11 @@ void setup()
   Serial.begin(115200);
   pinMode(LED_BUILTIN, OUTPUT);
 
-  ESP32AutoConnect ac(server, prefs); // create the autoconnect object, name of access point defaults to AutoConnectAP
-  //ESP32AutoConnect ac(server, prefs, SSID_AP); // name of access point is set to SSID_AP = esp-portal
-
-  ac.setESPhostname(HOSTNAME); // set a custom hostname for the web server
-
-  //ac.clearCredentials(); // activate this line to start with deleted credentials
-  ac.autoConnect(); // start the autoconnect process, continues on success
+  initESP32AutoConnect(&server, prefs, HOSTNAME);
 
   // handle the main web page (index_html[] stored in index.h)
   handleWebUi(); 
  
-  // start the web server, the user opens http://esp-websrv in a browser
   server.onNotFound(notFound);
   server.begin();
 

@@ -5,35 +5,33 @@
  * 
  * Purpose      Declaration of the class ESP32AutoConnect           
  */
-
-#include "Arduino.h"
+#pragma once
+#include <Arduino.h>
+#include <WiFi.h>
 #include <ESPAsyncWebServer.h>
 #include <Preferences.h>
-
-#pragma once
 
 class ESP32AutoConnect 
 {
     public:
-        ESP32AutoConnect(AsyncWebServer& server, Preferences& prefs, String accessPointSSID="AutoConnectAP") : 
-            _server(server), _prefs(prefs), _apSSID(accessPointSSID) 
+        ESP32AutoConnect(AsyncWebServer* server, Preferences& prefs, const char hostname[]="esp-websrv") : 
+            _server(server), _prefs(prefs), _hostname(hostname) 
         {
         }
 
         void autoConnect();
         void clearCredentials();
-        void setESPhostname(String hostname);
         
     private:
         bool credentialsAreAvailable();
         bool weAreConnectedToWLAN(String ssid, String password);
         void requestCredentialsAndRestart();
         String composeNetworkList();
-        String _apSSID;
+        String _apSSID = "AutoConnectAP";
         String _apPassword;
         String _ssid;
         String _password;
-        String _hostname = "esp-websrv";
+        String _hostname;
         Preferences& _prefs;
-        AsyncWebServer& _server;      
+        AsyncWebServer* _server;      
 };

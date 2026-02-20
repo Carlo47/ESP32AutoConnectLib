@@ -5,7 +5,7 @@ encapsulated in a class. The method is well known, but its
 implementation is often difficult to understand and overloaded 
 with many but rarely used features. This was the motivation to 
 implement a simple *ESP32AutoConnect* class myself, which actually 
-only had to do the following for my needs::
+only had to do the following for my needs:
 
     void ESP32AutoConnect::autoConnect()
     {
@@ -38,9 +38,7 @@ The use in setup() is even simpler:
     {
         Serial.begin(115200);
 
-        ESP32AutoConnect ac(server, prefs); 
-        ac.setESPhostname(HOSTNAME);
-        ac.autoConnect(); // start the autoconnect process and wait for connection
+        initESP32AutoConnect(&server, prefs, HOSTNAME);
 
         handleWebUi(); // handle the main web page
         server.onNotFound(notFound);
